@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdarg.h>
+
+//simple GCD base function for recursion
+int GCD_base(int a, int b){
+    if(b == 0){
+        return a;
+    }
+    return GCD_base(b, a % b);
+}
+
+//built in GCD function for direct calls
+int GCD(int count, ...){  //add the amount of integers added as the first parameter
+    
+    if(count < 1){
+        return 0;
+    }
+    
+    va_list list;
+    va_start(list, count);
+    
+    int result = va_arg(list, int);
+    
+    for(int i = 1; i < count; i++){
+        int next = va_arg(list, int);
+        result = GCD_base(result, next);
+    }
+    
+    va_end(list);
+    return result;
+}
+
+// user interactable GCD calculator
+int GCD_array(int len, int arr[]){ //add the length of the array
+    if(len<1){
+        return 0;
+    }
+    
+    int result = arr[0];
+    for(int i = 1; i<len; i++){
+        result = GCD_base(result, arr[i]);
+    }
+    
+    return result;
+    
+}
+
+int main() {
+    
+    //demo
+    int inp;
+    printf("Enter the number of integers you want to input: ");
+    scanf("%d",& inp);
+    
+    int arr[inp];
+    for(int i = 0; i < inp; i++){
+        printf("Enter number: ");
+        scanf("%d",& arr[i]);
+    }
+    
+    int ans = GCD_array(inp, arr);
+    
+    printf("GCD: %d", ans);
+    
+    return 0;
+}
